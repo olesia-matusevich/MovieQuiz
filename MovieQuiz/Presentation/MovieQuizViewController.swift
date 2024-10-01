@@ -1,13 +1,17 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController {
+    
     // MARK: - IB Outlets
-    @IBOutlet private weak var YesButton: UIButton!
-    @IBOutlet private weak var NoButton: UIButton!
-    @IBOutlet private weak var IndexLabel: UILabel!
-    @IBOutlet private weak var QuestionLabel: UILabel!
-    @IBOutlet private weak var PreviewImage: UIImageView!
+    
+    @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet private weak var noButton: UIButton!
+    @IBOutlet private weak var indexLabel: UILabel!
+    @IBOutlet private weak var questionLabel: UILabel!
+    @IBOutlet private weak var previewImage: UIImageView!
+    
     // MARK: - Private Properties
+    
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questions: [QuizQuestion] = [
@@ -67,7 +71,9 @@ final class MovieQuizViewController: UIViewController {
         let text: String
         let buttonText: String
     }
+    
     // MARK: - Overrides Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let currentQuestion = questions[currentQuestionIndex]
@@ -75,7 +81,9 @@ final class MovieQuizViewController: UIViewController {
    
         show(quiz: currentViewModel)
     }
+    
     // MARK: - IB Actions
+    
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false // 2
@@ -88,7 +96,9 @@ final class MovieQuizViewController: UIViewController {
         
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
+    
     // MARK: - Private Methods
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
@@ -97,13 +107,13 @@ final class MovieQuizViewController: UIViewController {
         return questionStep
     }
     private func show(quiz step: QuizStepViewModel){
-        PreviewImage.image = step.image
-        PreviewImage.layer.masksToBounds = true // разрешение на рисование рамки
-        PreviewImage.layer.borderWidth = 8 // толщина рамки
-        PreviewImage.layer.cornerRadius = 20 // радиус скругления углов рамки
+        previewImage.image = step.image
+        previewImage.layer.masksToBounds = true // разрешение на рисование рамки
+        previewImage.layer.borderWidth = 8 // толщина рамки
+        previewImage.layer.cornerRadius = 20 // радиус скругления углов рамки
         
-        QuestionLabel.text = step.question
-        IndexLabel.text = step.questionNumber
+        questionLabel.text = step.question
+        indexLabel.text = step.questionNumber
        
         updateBorderColor(color: UIColor.ypBlack)
         changeStateButton(isEnabled: true)
@@ -156,11 +166,11 @@ final class MovieQuizViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     private func updateBorderColor(color: UIColor) { //обновляет цвет рамки
-        PreviewImage.layer.borderColor = color.cgColor
+        previewImage.layer.borderColor = color.cgColor
     }
     private func changeStateButton(isEnabled: Bool){ //устанавливает доступность кнопок да/нет
-        NoButton.isEnabled = isEnabled
-        YesButton.isEnabled = isEnabled
+        noButton.isEnabled = isEnabled
+        yesButton.isEnabled = isEnabled
     }
 }
 
