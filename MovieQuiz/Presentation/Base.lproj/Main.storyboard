@@ -102,6 +102,9 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="BpN-hr-gQh">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
@@ -110,6 +113,8 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tvr-f7-s3M" secondAttribute="trailing" constant="20" id="5FR-qH-3vj"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="tvr-f7-s3M" secondAttribute="bottom" id="K2W-V7-c2b"/>
                             <constraint firstItem="tvr-f7-s3M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="RJj-BA-Cug"/>
+                            <constraint firstItem="BpN-hr-gQh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="izU-GL-IWM"/>
+                            <constraint firstItem="BpN-hr-gQh" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="nle-et-F1i"/>
                         </constraints>
                     </view>
                     <connections>
@@ -118,6 +123,7 @@
                         <outlet property="PreviewImage" destination="Oue-iv-9Fz" id="vTk-n5-5bP"/>
                         <outlet property="QuestionLabel" destination="DDS-Ic-C8Y" id="axl-u7-c1Z"/>
                         <outlet property="YesButton" destination="W3H-Ka-nH6" id="RTQ-n5-2Ma"/>
+                        <outlet property="activityIndicator" destination="BpN-hr-gQh" id="JuC-YV-22e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
