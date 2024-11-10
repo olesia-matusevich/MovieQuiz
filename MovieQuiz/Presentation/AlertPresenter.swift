@@ -1,6 +1,6 @@
 import UIKit
 
-class AlertPresenter: AlertPresenterProtocol {
+final class AlertPresenter: AlertPresenterProtocol {
     
     weak var delegate: AlertPresenterDelegate?
     
@@ -11,8 +11,11 @@ class AlertPresenter: AlertPresenterProtocol {
             message: result.message,
             preferredStyle: .alert)
         
-        let action = UIAlertAction(title: result.buttonText, style: .default){ [weak self] _ in // слабая ссылка на self
-            guard let self = self else { return } // разворачиваем слабую ссылку
+        let action = UIAlertAction(
+            title: result.buttonText,
+            style: .default
+        ){ [weak self] _ in
+            guard let self else { return }
             self.delegate?.playAgain()
         }
         alert.addAction(action)
