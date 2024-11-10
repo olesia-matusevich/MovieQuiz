@@ -107,7 +107,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             let viewModel = AlertModel(
                 title: "Этот раунд окончен!",
                 message: resultText,
-                buttonText: "Сыграть еще раз")
+                buttonText: "Сыграть ещё раз")
             alertPresenter?.triggerAlert(result: viewModel)
             
         } else { // 2
