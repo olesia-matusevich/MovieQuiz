@@ -11,8 +11,11 @@ final class AlertPresenter: AlertPresenterProtocol {
             message: result.message,
             preferredStyle: .alert)
         
-        let action = UIAlertAction(title: result.buttonText, style: .default){ [weak self] _ in
-            guard let self = self else { return } 
+        let action = UIAlertAction(
+            title: result.buttonText,
+            style: .default
+        ){ [weak self] _ in
+            guard let self else { return }
             self.delegate?.playAgain()
         }
         alert.addAction(action)

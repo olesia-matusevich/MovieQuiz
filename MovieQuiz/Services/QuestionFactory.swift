@@ -12,54 +12,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
     
     private var movies: [MostPopularMovie] = []
     
-    // закомментировано для следующего спринта
-    //    private let questions: [QuizQuestion] = [
-    //        QuizQuestion(
-    //            image: "The Godfather",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: true),
-    //        QuizQuestion(
-    //            image: "The Dark Knight",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: true),
-    //        QuizQuestion(
-    //            image: "Kill Bill",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: true),
-    //        QuizQuestion(
-    //            image: "The Avengers",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: true),
-    //        QuizQuestion(
-    //            image: "Deadpool",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: true),
-    //        QuizQuestion(
-    //            image: "The Green Knight",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: true),
-    //        QuizQuestion(
-    //            image: "Old",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: false),
-    //        QuizQuestion(
-    //            image: "The Ice Age Adventures of Buck Wild",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: false),
-    //        QuizQuestion(
-    //            image: "Tesla",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: false),
-    //        QuizQuestion(
-    //            image: "Vivarium",
-    //            text:"Рейтинг этого фильма больше чем 6?",
-    //            correctAnswer: false)
-    //    ]
-    
     func loadData() {
         moviesLoader.loadMovies { [weak self] result in
             DispatchQueue.main.async {
-                guard let self = self else { return }
+                guard let self else { return }
                 switch result {
                 case .success(let mostPopularMovies):
                     self.movies = mostPopularMovies.items
@@ -73,7 +29,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
     
     func requestNextQuestion() {
         DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             let index = (0..<self.movies.count).randomElement() ?? 0
             
             guard let movie = self.movies[safe: index] else { return }
@@ -86,9 +42,9 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 print("Failed to load image")
             }
             
-            let rating = Float(movie.rating) ?? 0
-            
-            let numberForQuestion = makeNumberForQuestion(rating: rating)
+            let rating = NSString(string: movie.rating).intValue
+            let numberForQuestion = Array(0...10).randomElement() ?? 6
+            //let numberForQuestion = makeNumberForQuestion(rating: rating)
             let correctAnswer = rating >= numberForQuestion
             
             let text = "Рейтинг этого фильма больше чем \(Int(numberForQuestion))?"
@@ -98,20 +54,9 @@ final class QuestionFactory: QuestionFactoryProtocol {
                                         correctAnswer: correctAnswer)
             
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.delegate?.didReceiveNextQuestion(question: question)
             }
         }
-    }
-    private func makeNumberForQuestion(rating: Float) -> Float{
-        let arrayForRandom: [Float] = [-1, 0 ,1]
-        var numberForQuestion: Float = 0
-        
-        if rating < 10 {
-            numberForQuestion = rating + arrayForRandom.randomElement()!
-        } else {
-            numberForQuestion = rating - 1
-        }
-        return numberForQuestion
     }
 }
