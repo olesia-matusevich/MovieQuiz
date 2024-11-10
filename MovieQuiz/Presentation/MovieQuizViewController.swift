@@ -13,13 +13,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     // MARK: - Private Properties
     
-    private var currentQuestionIndex = 0
+    //private var currentQuestionIndex = 0
     private var correctAnswers = 0
-    private let questionAmount = 10
+    //private let questionAmount = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticServiceProtocol?
+    private let presenter = MovieQuizPresenter()
     
     // MARK: - Overrides Methods
     
@@ -56,13 +57,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
     }
     
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        .init(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)"
-        )
-    }
+//    private func convert(model: QuizQuestion) -> QuizStepViewModel {
+//        .init(
+//            image: UIImage(data: model.image) ?? UIImage(),
+//            question: model.text,
+//            questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)"
+//        )
+//    }
     
     private func show(quiz step: QuizStepViewModel){
         previewImage.image = step.image
@@ -92,9 +93,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         changeStateButton(isEnabled: false)
     }
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionAmount-1 {
+        if presenter.isLastQuestion() {
           
-            statisticService?.store(correct: correctAnswers, total: questionAmount)
+            statisticService?.store(correct: correctAnswers, total: presenter.questionAmount)
             
             guard let gamesCount = statisticService?.gamesCount,
                   let bestCorrect = statisticService?.bestGame.correct,
@@ -102,7 +103,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
                   let bestDate = statisticService?.bestGame.date,
                   let totalAccuracy = statisticService?.totalAccuracy else {return}
             
-            let resultText = "Ваш результат: \(correctAnswers)/\(questionAmount) \n Количество сыгранных квизов: \(gamesCount) \n Рекорд: \(bestCorrect)/\(bestTotal) (\(bestDate.dateTimeString)) \n Средняя точность: \(String(format: "%.2f", totalAccuracy)) %"
+            let resultText = "Ваш результат: \(correctAnswers)/\(presenter.questionAmount) \n Количество сыгранных квизов: \(gamesCount) \n Рекорд: \(bestCorrect)/\(bestTotal) (\(bestDate.dateTimeString)) \n Средняя точность: \(String(format: "%.2f", totalAccuracy)) %"
             
             let viewModel = AlertModel(
                 title: "Этот раунд окончен!",
@@ -111,7 +112,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             alertPresenter?.triggerAlert(result: viewModel)
             
         } else { // 2
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
     }
@@ -148,7 +149,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question else { return }
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
@@ -166,7 +167,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     // MARK: - AlertPresenretDelegate
     
     func playAgain() {
-        currentQuestionIndex = 0
+        presenter.resetQuestionIndex()
         correctAnswers = 0
         questionFactory?.loadData()
     }
