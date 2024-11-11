@@ -1,4 +1,3 @@
-import Foundation
 import XCTest
 
 final class MovieQuizUITests: XCTestCase {

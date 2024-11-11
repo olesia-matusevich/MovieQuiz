@@ -6,13 +6,13 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
     var currentQuestionIndex: Int = 0
     var correctAnswers = 0
     
-    weak var viewController: MovieQuizViewController?
+    weak var viewController: MovieQuizViewControllerProtocol?
     private let statisticService: StatisticServiceProtocol!
     
     var currentQuestion: QuizQuestion?
     var questionFactory: QuestionFactoryProtocol?
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         
         self.viewController = viewController
         
@@ -34,6 +34,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
         guard let currentQuestion else { return }
         self.proceedWithAnswer(isCorrect: answer == currentQuestion.correctAnswer)
     }
+ 
+    func didCorrectAnswer(){
+        correctAnswers += 1
+    }
     
     // MARK: - Private Methods
     
@@ -50,11 +54,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
         currentQuestionIndex += 1
     }
     
-    private func didCorrectAnswer(){
-        correctAnswers += 1
-    }
-    
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
+   func convert(model: QuizQuestion) -> QuizStepViewModel {
         .init(
             image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
@@ -98,12 +98,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
     }
     
     private func proceedWithAnswer(isCorrect: Bool) {
-        if isCorrect {
-            didCorrectAnswer()
-            viewController?.updateBorderColor(color: UIColor.ypGreen)
-        }else{
-            viewController?.updateBorderColor(color: UIColor.ypRed)
-        }
+        viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self else { return }
             self.proceedToNextQuestionOrResults()

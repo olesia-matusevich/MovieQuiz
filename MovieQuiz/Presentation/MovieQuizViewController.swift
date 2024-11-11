@@ -1,7 +1,7 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
-    
+final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, MovieQuizViewControllerProtocol {
+
     // MARK: - IB Outlets
     
     @IBOutlet private weak var yesButton: UIButton!
@@ -57,6 +57,15 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate {
     
     func showAlert(result: AlertModel){
         alertPresenter?.triggerAlert(result: result)
+    }
+    
+    func highlightImageBorder(isCorrectAnswer: Bool) {
+        if isCorrectAnswer {
+            presenter.didCorrectAnswer()
+            updateBorderColor(color: UIColor.ypGreen)
+        }else{
+            updateBorderColor(color: UIColor.ypRed)
+        }
     }
     
     func updateBorderColor(color: UIColor) {
