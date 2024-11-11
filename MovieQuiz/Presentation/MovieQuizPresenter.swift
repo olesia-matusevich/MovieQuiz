@@ -34,9 +34,17 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
         guard let currentQuestion else { return }
         self.proceedWithAnswer(isCorrect: answer == currentQuestion.correctAnswer)
     }
- 
+    
     func didCorrectAnswer(){
         correctAnswers += 1
+    }
+    
+    func convert(model: QuizQuestion) -> QuizStepViewModel {
+        .init(
+            image: UIImage(data: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)"
+        )
     }
     
     // MARK: - Private Methods
@@ -52,14 +60,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate  {
     
     private func switchToNextQuestion() {
         currentQuestionIndex += 1
-    }
-    
-   func convert(model: QuizQuestion) -> QuizStepViewModel {
-        .init(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionAmount)"
-        )
     }
     
     private func proceedToNextQuestionOrResults() {

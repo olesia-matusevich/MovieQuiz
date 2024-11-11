@@ -1,7 +1,7 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, MovieQuizViewControllerProtocol {
-
+    
     // MARK: - IB Outlets
     
     @IBOutlet private weak var yesButton: UIButton!
